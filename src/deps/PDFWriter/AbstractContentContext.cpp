@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "AbstractContentContext.h"
 #include "PDFStream.h"
@@ -193,13 +193,13 @@ class CSSColorMap
 {
 public:
     CSSColorMap();
-    
+
     unsigned long GetRGBForColorName(const std::string& inColorName);
-    
+
 private:
-    
+
     StringToULongMap mColorMap;
-    
+
 };
 
 CSSColorMap::CSSColorMap()
@@ -208,19 +208,19 @@ CSSColorMap::CSSColorMap()
 
     for(i=0;strlen(kCSSColors[i].name) != 0; ++i)
         mColorMap.insert(StringToULongMap::value_type(kCSSColors[i].name,kCSSColors[i].rgbValue));
-    
+
 }
 
 
 unsigned long CSSColorMap::GetRGBForColorName(const std::string& inColorName)
 {
     std::string key = inColorName;
-    
+
     // convert to lower case, to match against color names
     std::transform(key.begin(), key.end(), key.begin(), ::tolower);
-    
+
     StringToULongMap::iterator it = mColorMap.find(key);
-    
+
     if(it == mColorMap.end())
         return 0;
     else
@@ -247,12 +247,12 @@ AbstractContentContext::~AbstractContentContext(void)
 
 void AbstractContentContext::SetPDFStreamForWrite(PDFStream* inStream)
 {
-	mPrimitiveWriter.SetStreamForWriting(inStream->GetWriteStream());	
+	mPrimitiveWriter.SetStreamForWriting(inStream->GetWriteStream());
 }
 
 void AbstractContentContext::AssertProcsetAvailable(const std::string& inProcsetName)
 {
-	GetResourcesDictionary()->AddProcsetResource(inProcsetName);	
+	GetResourcesDictionary()->AddProcsetResource(inProcsetName);
 }
 
 
@@ -370,8 +370,8 @@ void AbstractContentContext::l(double inX,double inY)
 	mPrimitiveWriter.WriteKeyword("l");
 }
 
-void AbstractContentContext::c(	double inX1,double inY1, 
-							double inX2, double inY2, 
+void AbstractContentContext::c(	double inX1,double inY1,
+							double inX2, double inY2,
 							double inX3, double inY3)
 {
 	RenewStreamConnection();
@@ -386,7 +386,7 @@ void AbstractContentContext::c(	double inX1,double inY1,
 	mPrimitiveWriter.WriteKeyword("c");
 }
 
-void AbstractContentContext::v(	double inX2,double inY2, 
+void AbstractContentContext::v(	double inX2,double inY2,
 							double inX3, double inY3)
 {
 	RenewStreamConnection();
@@ -399,7 +399,7 @@ void AbstractContentContext::v(	double inX2,double inY2,
 	mPrimitiveWriter.WriteKeyword("v");
 }
 
-void AbstractContentContext::y(	double inX1,double inY1, 
+void AbstractContentContext::y(	double inX1,double inY1,
 							double inX3, double inY3)
 {
 	RenewStreamConnection();
@@ -427,7 +427,7 @@ void AbstractContentContext::q()
 
 	mPrimitiveWriter.WriteKeyword("q");
 	mGraphicStack.Push();
-    
+
     IContentContextListenerSet::iterator it = mListeners.begin();
     for(; it != mListeners.end();++it)
         (*it)->Onq(this);
@@ -440,11 +440,11 @@ EStatusCode AbstractContentContext::Q()
 
 	mPrimitiveWriter.WriteKeyword("Q");
 	EStatusCode status = mGraphicStack.Pop();
-    
+
     IContentContextListenerSet::iterator it = mListeners.begin();
     for(; it != mListeners.end();++it)
         (*it)->OnQ(this);
-    
+
     return status;
 }
 
@@ -704,8 +704,8 @@ void AbstractContentContext::Do(const std::string& inXObjectName)
 	RenewStreamConnection();
 	AssertProcsetAvailable(KProcsetPDF);
 
-	mPrimitiveWriter.WriteName(inXObjectName);	
-	mPrimitiveWriter.WriteKeyword("Do");	
+	mPrimitiveWriter.WriteName(inXObjectName);
+	mPrimitiveWriter.WriteKeyword("Do");
 }
 
 void AbstractContentContext::Tc(double inCharacterSpace)
@@ -887,8 +887,8 @@ void AbstractContentContext::QuoteHexLow(const std::string& inText)
 	mPrimitiveWriter.WriteKeyword("Quote");
 }
 
-void AbstractContentContext::DoubleQuoteLow(	double inWordSpacing, 
-											double inCharacterSpacing, 
+void AbstractContentContext::DoubleQuoteLow(	double inWordSpacing,
+											double inCharacterSpacing,
 											const std::string& inText)
 {
 	RenewStreamConnection();
@@ -929,7 +929,7 @@ void AbstractContentContext::TJLow(const StringOrDoubleList& inStringsAndSpacing
 		else
 			mPrimitiveWriter.WriteLiteralString(it->SomeValue);
 	}
-	
+
 	mPrimitiveWriter.EndArray(eTokenSeparatorSpace);
 
 	mPrimitiveWriter.WriteKeyword("TJ");
@@ -951,7 +951,7 @@ void AbstractContentContext::TJHexLow(const StringOrDoubleList& inStringsAndSpac
 		else
 			mPrimitiveWriter.WriteHexString(it->SomeValue);
 	}
-	
+
 	mPrimitiveWriter.EndArray(eTokenSeparatorSpace);
 
 	mPrimitiveWriter.WriteKeyword("TJ");
@@ -1058,7 +1058,7 @@ EStatusCode AbstractContentContext::TJ(const StringOrDoubleList& inStringsAndSpa
 	StringOrDoubleList::const_iterator it = inStringsAndSpacing.begin();
 	GlyphUnicodeMappingListOrDoubleList parameters;
 	EStatusCode encodingStatus;
-	
+
 	for(; it != inStringsAndSpacing.end();++it)
 	{
 		if(it->IsDouble)
@@ -1097,14 +1097,14 @@ EStatusCode AbstractContentContext::WriteTextCommandWithDirectGlyphSelection(con
 
 	ObjectIDType fontObjectID;
 	UShortList encodedCharactersList;
-	bool writeAsCID;	
+	bool writeAsCID;
 
 	if(currentFont->EncodeStringForShowing(inText,fontObjectID,encodedCharactersList,writeAsCID) != PDFHummus::eSuccess)
 	{
 		TRACE_LOG("AbstractcontextContext::WriteTextCommandWithDirectGlyphSelection, Unexepcted failure, Cannot encode characters");
 		return PDFHummus::eFailure;
 	}
-	
+
 	// skip if there's no text going to be written (also means no font ID)
 	if(encodedCharactersList.empty() || 0 == fontObjectID)
 		return PDFHummus::eSuccess;
@@ -1115,7 +1115,7 @@ EStatusCode AbstractContentContext::WriteTextCommandWithDirectGlyphSelection(con
 	if(mGraphicStack.GetCurrentState().mPlacedFontName != fontName ||
 		mGraphicStack.GetCurrentState().mPlacedFontSize != mGraphicStack.GetCurrentState().mFontSize)
 		TfLow(fontName,mGraphicStack.GetCurrentState().mFontSize);
-	
+
 	// Now write the string using the text command
 	OutputStringBufferStream stringStream;
 	char formattingBuffer[5];
@@ -1140,7 +1140,7 @@ EStatusCode AbstractContentContext::WriteTextCommandWithDirectGlyphSelection(con
 			formattingBuffer[0] = (*it) & 0x00ff;
 			stringStream.Write((const Byte*)formattingBuffer,1);
 		}
-		inTextCommand->WriteLiteralStringCommand(stringStream.ToString());	
+		inTextCommand->WriteLiteralStringCommand(stringStream.ToString());
 	}
 	return PDFHummus::eSuccess;
 }
@@ -1173,7 +1173,7 @@ EStatusCode AbstractContentContext::TJ(const GlyphUnicodeMappingListOrDoubleList
 	// first, list all the strings, so that you can encode them
 	GlyphUnicodeMappingListList stringsList;
 	GlyphUnicodeMappingListOrDoubleList::const_iterator it = inStringsAndSpacing.begin();
-	
+
 	for(; it != inStringsAndSpacing.end(); ++it)
 		if(!it->IsDouble)
 			stringsList.push_back(it->SomeValue);
@@ -1182,14 +1182,14 @@ EStatusCode AbstractContentContext::TJ(const GlyphUnicodeMappingListOrDoubleList
 
 	ObjectIDType fontObjectID;
 	UShortListList encodedCharachtersListsList;
-	bool writeAsCID;	
+	bool writeAsCID;
 
 	if(currentFont->EncodeStringsForShowing(stringsList,fontObjectID,encodedCharachtersListsList,writeAsCID)!= PDFHummus::eSuccess)
 	{
 		TRACE_LOG("AbstractContentContext::TJ, Unexepcted failure, cannot include characters for writing final representation");
 		return PDFHummus::eFailure;
 	}
-	
+
 	// skip if there's no text going to be written (also means no font ID)
 	if(encodedCharachtersListsList.empty() || 0 == fontObjectID)
 		return PDFHummus::eSuccess;
@@ -1202,7 +1202,7 @@ EStatusCode AbstractContentContext::TJ(const GlyphUnicodeMappingListOrDoubleList
 	if(mGraphicStack.GetCurrentState().mPlacedFontName != fontName ||
 		mGraphicStack.GetCurrentState().mPlacedFontSize != mGraphicStack.GetCurrentState().mFontSize)
 		TfLow(fontName,mGraphicStack.GetCurrentState().mFontSize);
-	
+
 	// Now write the string using the text command
 	OutputStringBufferStream stringStream;
 	char formattingBuffer[5];
@@ -1255,7 +1255,7 @@ EStatusCode AbstractContentContext::TJ(const GlyphUnicodeMappingListOrDoubleList
 		}
 		TJLow(stringOrDoubleList);
 	}
-	return PDFHummus::eSuccess;	
+	return PDFHummus::eSuccess;
 }
 
 void AbstractContentContext::WriteFreeCode(const std::string& inFreeCode)
@@ -1266,7 +1266,7 @@ void AbstractContentContext::WriteFreeCode(const std::string& inFreeCode)
 void AbstractContentContext::WriteFreeCode(IByteReader* inFreeCodeSource)
 {
 	RenewStreamConnection();
-    
+
     OutputStreamTraits traits(mPrimitiveWriter.GetWritingStream());
     traits.CopyToOutputStream(inFreeCodeSource);
 }
@@ -1302,7 +1302,7 @@ void AbstractContentContext::DrawCircle(double inCenterX,double inCenterY,double
     double y = inCenterY;
     double r = inRadius;
     double rmagic = r * magic;
-    
+
 	SetupColor(inOptions);
 	if(inOptions.drawingType == eStroke)
 		w(inOptions.strokeWidth);
@@ -1368,7 +1368,7 @@ void AbstractContentContext::SetupColor(EDrawingType inDrawingType,unsigned long
                 double m = (unsigned char)((inColorValue >> 16) & 0xFF);
                 double y = (unsigned char)((inColorValue >> 8) & 0xFF);
                 double kValue = (unsigned char)(inColorValue & 0xFF);
-                
+
                 if(inDrawingType == eStroke)
                     K(c/255,m/255,y/255,kValue/255);
                 else
@@ -1378,7 +1378,7 @@ void AbstractContentContext::SetupColor(EDrawingType inDrawingType,unsigned long
 		case eGray:
 			{
 				double gValue = (unsigned char)(inColorValue & 0xFF);
-                
+
                 if(inDrawingType == eStroke)
                     G(gValue/255);
                 else
@@ -1447,12 +1447,12 @@ void AbstractContentContext::DrawImage(double inX,double inY,const std::string& 
 
         double scaleX = 1;
         double scaleY = 1;
-                    
+
         if(inOptions.fitPolicy == eAlways)
         {
             scaleX = inOptions.boundingBoxWidth / imageDimensions.first;
             scaleY = inOptions.boundingBoxHeight / imageDimensions.second;
-                        
+
 
         }
         else if(imageDimensions.first > inOptions.boundingBoxWidth || imageDimensions.second > inOptions.boundingBoxHeight) // overflow
@@ -1460,13 +1460,13 @@ void AbstractContentContext::DrawImage(double inX,double inY,const std::string& 
             scaleX = imageDimensions.first > inOptions.boundingBoxWidth ? inOptions.boundingBoxWidth / imageDimensions.first : 1;
             scaleY = imageDimensions.second > inOptions.boundingBoxHeight ? inOptions.boundingBoxHeight / imageDimensions.second : 1;
         }
-                    
+
         if(inOptions.fitProportional)
         {
             scaleX = std::min(scaleX,scaleY);
             scaleY = scaleX;
         }
-                    
+
         transformation[0] = scaleX;
         transformation[3] = scaleY;
 	}
@@ -1476,12 +1476,13 @@ void AbstractContentContext::DrawImage(double inX,double inY,const std::string& 
 
     // registering the images at pdfwriter to allow optimization on image writes
     ObjectIDTypeAndBool result = mDocumentContext->RegisterImageForDrawing(inImagePath,inOptions.imageIndex);
-    if(result.second)
-    {
+    // Updated to write each image as a separate layer
+    // if(result.second)
+    // {
         // if first usage, write the image
         ScheduleImageWrite(inImagePath,inOptions.imageIndex,result.first,inOptions.pdfParsingOptions);
-    }
-    
+    // }
+
     q();
     cm(transformation[0],transformation[1],transformation[2],transformation[3],transformation[4],transformation[5]);
     Do(GetResourcesDictionary()->AddFormXObjectMapping(result.first));
