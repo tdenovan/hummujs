@@ -28,10 +28,10 @@
     "PDFRStreamForBuffer.js"
   ],
   "dependencies": {
-    "node-pre-gyp": "^0.10.0"
+    "node-gyp": "^4.0.0"
   },
   "bundledDependencies": [
-    "node-pre-gyp"
+    "node-gyp"
   ],
   "devDependencies": {
     "aws-sdk": "~2.0.0-rc.15",

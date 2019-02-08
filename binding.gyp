@@ -69,9 +69,9 @@
 			'copies': [
 				{
 					'files': [
-						'hummus.node'
+						'<(PRODUCT_DIR)/hummus.node'
 					],
-					'destination': './binding'
+					'destination': 'hummus.node'
 				}
 			]
 		}
