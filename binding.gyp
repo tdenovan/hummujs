@@ -1,4 +1,5 @@
 {
+    'module_name': 'hummus',
     'targets': [
     {
             'target_name': 'hummus',
@@ -64,16 +65,16 @@
 		{
 			'target_name': 'action_after_build',
 			'type': 'none',
-			'dependencies': [ '<(module_name)' ],
+			'dependencies': [ 'hummus' ],
 			'copies': [
 				{
 					'files': [
-						'<(PRODUCT_DIR)/hummus.node'
+						'hummus.node'
 					],
-					'destination': '<(module_path)'
+					'destination': './binding'
 				}
 			]
 		}
 
-    ]        
+    ]
 }
