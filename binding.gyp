@@ -71,7 +71,7 @@
 					'files': [
 						'<(PRODUCT_DIR)/hummus.node'
 					],
-					'destination': 'hummus.node'
+					'destination': './binding'
 				}
 			]
 		}
