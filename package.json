@@ -28,7 +28,8 @@
     "PDFRStreamForBuffer.js"
   ],
   "dependencies": {
-    "node-gyp": "^3.8.0"
+    "node-gyp": "^3.8.0",
+    "node-pre-gyp": "^0.12.0"
   },
   "bundledDependencies": [
     "node-gyp"
